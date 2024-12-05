@@ -1,0 +1,51 @@
+services:
+  portal-server:
+#    image: levanovroman/portal-nordsy-github-actions:latest
+#    pull_policy: always
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: /target/update-db-for-portal-production-system-0.0.1-SNAPSHOT.jar
+    env_file:
+      - .env
+    ports:
+      - 8088:8088
+#    volumes:
+#      - spring-photo:/home/photos
+#      - spring-book:/home/books
+#      - spring-document:/home/documents
+#      - spring-backups:/home/backups
+#      - spring-log:/home/logs
+    restart: always
+
+#volumes:
+#  spring-photo:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: "/home/astra/photo"
+#  spring-book:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: "/home/astra/book"
+#  spring-document:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: "/home/astra/document"
+#  spring-backups:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: "/home/astra/backups"
+#  spring-log:
+#    driver: local
+#    driver_opts:
+#      o: bind
+#      type: none
+#      device: "/home/astra/logs"
