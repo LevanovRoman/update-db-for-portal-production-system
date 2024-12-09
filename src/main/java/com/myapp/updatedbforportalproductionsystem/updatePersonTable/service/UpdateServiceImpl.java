@@ -1,7 +1,7 @@
-package com.myapp.updatedbforportalproductionsystem.updatePersonalTable.service;
+package com.myapp.updatedbforportalproductionsystem.updatePersonTable.service;
 
-import com.myapp.updatedbforportalproductionsystem.updatePersonalTable.entity.Personal;
-import com.myapp.updatedbforportalproductionsystem.updatePersonalTable.repository.PersonalRepository;
+import com.myapp.updatedbforportalproductionsystem.updatePersonTable.entity.Person;
+import com.myapp.updatedbforportalproductionsystem.updatePersonTable.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class UpdateServiceImpl implements UpdateService{
 
-    private final PersonalRepository personalRepository;
+    private final PersonRepository personRepository;
     private final JdbcTemplate jdbcTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateServiceImpl.class);
@@ -31,47 +31,48 @@ public class UpdateServiceImpl implements UpdateService{
     @Value("${POSTGRES_EXTERNAL_PASSWORD}")
     private String POSTGRES_PASSWORD;
 
-    public UpdateServiceImpl(PersonalRepository personalRepository, JdbcTemplate jdbcTemplate) {
-        this.personalRepository = personalRepository;
+    public UpdateServiceImpl(PersonRepository personRepository, JdbcTemplate jdbcTemplate) {
+        this.personRepository = personRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Moscow")
-    public void updateTablePersonal() {
-        List<Personal> personalList = new ArrayList<>();
-        String querySelectData = "SELECT tab_n, full_name_io, appoint_name FROM persons_cand WHERE card_id < 50";
+    public void updateTablePerson() {
+        List<Person> personList = new ArrayList<>();
+        String querySelectData = "SELECT tab_n, full_name_io, appoint_name FROM persons_cand" +
+                " WHERE persons_cand.d_out > CURRENT_DATE";
 
-        logger.info("Начало выполнения обновления таблицы personal {}", getCurrentTime());
-        // Заполняем таблицу personal из persons_cand
+        logger.info("Начало выполнения обновления таблицы person {}", getCurrentTime());
+        // Заполняем таблицу person из persons_cand
         try (Connection connection = DriverManager.getConnection(POSTGRES_URL, POSTGRES_USERNAME, POSTGRES_PASSWORD);
              Statement statement = connection.createStatement()){
             try (ResultSet resultSet = statement.executeQuery(querySelectData)) {
                 while (resultSet.next()) {
-                    Personal personal = new Personal();
-                    personal.setTabNumber(resultSet.getString("tab_n"));
-                    personal.setFullName(resultSet.getString("full_name_io"));
-                    personal.setAppointName(resultSet.getString("appoint_name"));
-                    personalList.add(personal);
+                    Person person = new Person();
+                    person.setTabNumber(resultSet.getString("tab_n"));
+                    person.setFullName(resultSet.getString("full_name_io"));
+                    person.setAppointName(resultSet.getString("appoint_name"));
+                    personList.add(person);
             }
 
         }
-            // Удаляем таблицу personal
+            // Удаляем таблицу person
             truncateTable();
-            logger.info("Таблица personal успешно удалена.");
+            logger.info("Таблица person успешно удалена.");
         }catch (Exception e) {
             logger.error("An error occurred", e);
         }
-        savePersonal(personalList);
-        logger.info("Таблица personal успешно обновлена.");
+        savePerson(personList);
+        logger.info("Таблица person успешно обновлена.");
     }
 
-    private void savePersonal(List<Personal> personalList){
-        personalRepository.saveAll(personalList);
+    private void savePerson(List<Person> personList){
+        personRepository.saveAll(personList);
     }
 
     private void truncateTable() {
-        jdbcTemplate.execute("TRUNCATE TABLE personal RESTART IDENTITY CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE person RESTART IDENTITY CASCADE");
     }
 
     private String getCurrentTime() {

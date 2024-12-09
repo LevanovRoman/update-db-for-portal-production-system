@@ -1,4 +1,4 @@
-package com.myapp.updatedbforportalproductionsystem.updatePersonalTable.entity;
+package com.myapp.updatedbforportalproductionsystem.updatePersonTable.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 //@Builder
 //@AllArgsConstructor
 //@NoArgsConstructor
-public class Personal {
+public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +24,10 @@ public class Personal {
 
     private String appointName;
 
-    public Personal() {
+    public Person() {
     }
 
-    public Personal(String tabNumber, Long id, String fullName, String appointName) {
+    public Person(String tabNumber, Long id, String fullName, String appointName) {
         this.tabNumber = tabNumber;
         this.id = id;
         this.fullName = fullName;

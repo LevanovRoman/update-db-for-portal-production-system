@@ -1,5 +1,6 @@
 services:
   portal-server:
+    container_name: update_pps
 #    image: levanovroman/portal-nordsy-github-actions:latest
 #    pull_policy: always
     build:
@@ -10,15 +11,21 @@ services:
       - .env
     ports:
       - 8088:8088
-#    volumes:
+    volumes:
 #      - spring-photo:/home/photos
 #      - spring-book:/home/books
 #      - spring-document:/home/documents
 #      - spring-backups:/home/backups
-#      - spring-log:/home/logs
+      - spring-log:/home/logs
     restart: always
 
-#volumes:
+volumes:
+  spring-log:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: "/home/astra/logs/update-db-for-portal"
 #  spring-photo:
 #    driver: local
 #    driver_opts:
@@ -43,9 +50,3 @@ services:
 #      o: bind
 #      type: none
 #      device: "/home/astra/backups"
-#  spring-log:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: "/home/astra/logs"

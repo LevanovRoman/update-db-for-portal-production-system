@@ -2,6 +2,7 @@ package com.myapp.updatedbforportalproductionsystem.statisticsPPU;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,15 +26,21 @@ public class ApiService {
         this.restTemplate = restTemplate;
     }
 
+    @Value("${1S_EXTERNAL_URL}")
+    private String apiUrl;
+
+    @Value("${1S_EXTERNAL_USERNAME}")
+    private String apiUsername;
+
+    @Value("${1S_EXTERNAL_PASSWORD}")
+    private String apiPassword;
+
     private static final Logger logger = LoggerFactory.getLogger(ApiService.class);
 
-//    private final String url = "http://dev1c/Design1CDO3/hs/online-ppu/getOnline_ppu";
-
     public List<MyDataDto> getDataFromExternalApi() {
-        String apiUrl = "http://dev1c/Design1CDO3/hs/online-ppu/getOnline_ppu";
         logger.info("Sending request to {}", apiUrl);
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth("erpagent", "123");
+        headers.setBasicAuth(apiUsername, apiPassword);
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<List<MyDataDto>> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity,
                 new ParameterizedTypeReference<List<MyDataDto>>() {});
@@ -43,7 +50,7 @@ public class ApiService {
 
     @Scheduled(cron = "0 10 1 * * *", zone = "Europe/Moscow")
     public void getDataFrom1S(){
-        logger.info("Получение данных из 1С {}", getCurrentTime());
+        logger.info("Getting data from 1S:  time: {}", getCurrentTime());
         List<MyDataDto> myDataDtoList = getDataFromExternalApi();
         logger.info("Zaregistrirovano:   {}", myDataDtoList.getFirst().Zaregistrirovano());
         logger.info("Soglasovano:   {}", myDataDtoList.getFirst().Soglasovano());
