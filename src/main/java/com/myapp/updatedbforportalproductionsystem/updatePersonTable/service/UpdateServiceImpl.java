@@ -43,7 +43,7 @@ public class UpdateServiceImpl implements UpdateService{
         String querySelectData = "SELECT tab_n, full_name_io, appoint_name FROM persons_cand" +
                 " WHERE persons_cand.d_out > CURRENT_DATE";
 
-        logger.info("Начало выполнения обновления таблицы person {}", getCurrentTime());
+        logger.info("Start of the table 'person' update  {}", getCurrentTime());
         // Заполняем таблицу person из persons_cand
         try (Connection connection = DriverManager.getConnection(POSTGRES_URL, POSTGRES_USERNAME, POSTGRES_PASSWORD);
              Statement statement = connection.createStatement()){
@@ -59,12 +59,12 @@ public class UpdateServiceImpl implements UpdateService{
         }
             // Удаляем таблицу person
             truncateTable();
-            logger.info("Таблица person успешно удалена.");
+            logger.info("Table 'person' deleted successfully.");
         }catch (Exception e) {
             logger.error("An error occurred", e);
         }
         savePerson(personList);
-        logger.info("Таблица person успешно обновлена.");
+        logger.info("Table 'person' updated successfully.");
     }
 
     private void savePerson(List<Person> personList){
