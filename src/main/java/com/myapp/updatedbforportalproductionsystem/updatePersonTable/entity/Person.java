@@ -24,14 +24,17 @@ public class Person {
 
     private String appointName;
 
+    private String department;
+
     public Person() {
     }
 
-    public Person(String tabNumber, Long id, String fullName, String appointName) {
+    public Person(String tabNumber, Long id, String fullName, String appointName, String department) {
         this.tabNumber = tabNumber;
         this.id = id;
         this.fullName = fullName;
         this.appointName = appointName;
+        this.department = department;
     }
 
     public void setId(Long id) {
@@ -48,5 +51,9 @@ public class Person {
 
     public void setAppointName(String appointName) {
         this.appointName = appointName;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

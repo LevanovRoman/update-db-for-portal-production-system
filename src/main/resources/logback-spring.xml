@@ -1,0 +1,14 @@
+<configuration>
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ" timeZone="Europe/Moscow" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <timeZone>Europe/Moscow</timeZone>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>

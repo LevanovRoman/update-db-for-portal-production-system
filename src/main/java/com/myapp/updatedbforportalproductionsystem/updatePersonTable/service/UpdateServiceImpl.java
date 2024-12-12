@@ -37,10 +37,10 @@ public class UpdateServiceImpl implements UpdateService{
     }
 
     @Override
-    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 30 11 * * *", zone = "Europe/Moscow")
     public void updateTablePerson() {
         List<Person> personList = new ArrayList<>();
-        String querySelectData = "SELECT tab_n, full_name_io, appoint_name FROM persons_cand" +
+        String querySelectData = "SELECT tab_n, full_name_io, appoint_name, dept_root_name FROM persons_cand" +
                 " WHERE persons_cand.d_out > CURRENT_DATE";
 
         logger.info("Start of the table 'person' update  {}", getCurrentTime());
@@ -53,6 +53,7 @@ public class UpdateServiceImpl implements UpdateService{
                     person.setTabNumber(resultSet.getString("tab_n"));
                     person.setFullName(resultSet.getString("full_name_io"));
                     person.setAppointName(resultSet.getString("appoint_name"));
+                    person.setDepartment(resultSet.getString("dept_root_name"));
                     personList.add(person);
             }
 

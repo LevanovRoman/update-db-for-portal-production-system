@@ -1,8 +1,6 @@
 services:
   portal-server:
     container_name: update_pps
-#    image: levanovroman/portal-nordsy-github-actions:latest
-#    pull_policy: always
     build:
       dockerfile: Dockerfile
       args:
@@ -15,7 +13,7 @@ services:
 #      - spring-photo:/home/photos
 #      - spring-book:/home/books
 #      - spring-document:/home/documents
-#      - spring-backups:/home/backups
+      - spring-backups:/home/backups
       - spring-log:/home/logs
     restart: always
 
@@ -26,6 +24,12 @@ volumes:
       o: bind
       type: none
       device: "/home/astra/logs/update-db-for-portal"
+  spring-backups:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: "/home/astra/backups"
 #  spring-photo:
 #    driver: local
 #    driver_opts:
@@ -44,9 +48,4 @@ volumes:
 #      o: bind
 #      type: none
 #      device: "/home/astra/document"
-#  spring-backups:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: "/home/astra/backups"
+
