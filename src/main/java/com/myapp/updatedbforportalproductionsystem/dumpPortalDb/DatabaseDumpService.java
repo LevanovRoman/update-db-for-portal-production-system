@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 @Service
@@ -39,7 +40,7 @@ public class DatabaseDumpService {
         this.fileCleanupService = fileCleanupService;
     }
 
-    @Scheduled(cron = "0 20 9 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 10 8 * * *", zone = "Europe/Moscow")
     public void createDatabaseDump() {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String dumpFileName = backupDir + "backup_" + timestamp + ".sql";
@@ -55,6 +56,8 @@ public class DatabaseDumpService {
                 "-v",
                 "-f", dumpFileName
         };
+        System.out.println("COMMAND: " + Arrays.toString(command));
+        System.out.println("DUMPFILE: " + dumpFileName);
 
         // Устанавливаем пароль в переменную окружения
         ProcessBuilder processBuilder = new ProcessBuilder(command);

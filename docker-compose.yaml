@@ -10,9 +10,6 @@ services:
     ports:
       - 8088:8088
     volumes:
-#      - spring-photo:/home/photos
-#      - spring-book:/home/books
-#      - spring-document:/home/documents
       - spring-backups:/home/backups
       - spring-log:/home/logs
     restart: always
@@ -23,29 +20,12 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: "/home/astra/logs/update-db-for-portal"
+      device: "/home/astra/logs"
   spring-backups:
     driver: local
     driver_opts:
       o: bind
       type: none
       device: "/home/astra/backups"
-#  spring-photo:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: "/home/astra/photo"
-#  spring-book:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: "/home/astra/book"
-#  spring-document:
-#    driver: local
-#    driver_opts:
-#      o: bind
-#      type: none
-#      device: "/home/astra/document"
+
 

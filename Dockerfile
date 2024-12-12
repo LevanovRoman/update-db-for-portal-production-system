@@ -8,9 +8,9 @@ RUN java -Djarmode=layertools -jar application.jar extract --destination extract
 
 FROM eclipse-temurin:21.0.2_13-jdk-jammy
 
-#RUN apt-get update && \
-#    apt-get install -y postgresql-client && \
-#    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN addgroup spring-boot-group && adduser --ingroup spring-boot-group spring-boot
 USER spring-boot:spring-boot-group

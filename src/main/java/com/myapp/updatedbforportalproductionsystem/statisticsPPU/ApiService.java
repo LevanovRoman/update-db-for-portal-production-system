@@ -48,7 +48,7 @@ public class ApiService {
         return response.getBody();
     }
 
-    @Scheduled(cron = "0 35 9 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 15 8 * * *", zone = "Europe/Moscow")
     public void getDataFrom1S(){
         logger.info("Getting data from 1S:  time: {}", getCurrentTime());
         List<MyDataDto> myDataDtoList = getDataFromExternalApi();

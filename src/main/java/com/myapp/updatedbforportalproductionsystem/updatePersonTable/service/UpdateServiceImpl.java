@@ -37,11 +37,10 @@ public class UpdateServiceImpl implements UpdateService{
     }
 
     @Override
-    @Scheduled(cron = "0 30 9 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 20 8 * * *", zone = "Europe/Moscow")
     public void updateTablePerson() {
         List<Person> personList = new ArrayList<>();
-        String querySelectData = "SELECT tab_n, full_name_io, appoint_name, dept_root_name FROM persons_cand" +
-                " WHERE persons_cand.d_out > CURRENT_DATE";
+        String querySelectData = "SELECT tab_n, INITCAP(\"full_name_io\") AS full_name_io, \"appoint_name\", dept_root_name FROM persons_cand WHERE persons_cand.d_out > CURRENT_DATE";
 
         logger.info("Start of the table 'person' update  {}", getCurrentTime());
         // Заполняем таблицу person из persons_cand
