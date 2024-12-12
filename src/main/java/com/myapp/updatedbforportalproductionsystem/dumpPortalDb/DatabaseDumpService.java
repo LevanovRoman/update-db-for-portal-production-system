@@ -13,10 +13,10 @@ import java.util.Date;
 @Service
 public class DatabaseDumpService {
 
-    @Value("${DB_PORT}")
+    @Value("${SERVER_DEV}")
     private String dbHost;
 
-    @Value("${SERVER_DEV}")
+    @Value("${DB_PORT}")
     private String dbPort;
 
     @Value("${DB_NAME}")
@@ -39,7 +39,7 @@ public class DatabaseDumpService {
         this.fileCleanupService = fileCleanupService;
     }
 
-    @Scheduled(cron = "0 20 11 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 20 9 * * *", zone = "Europe/Moscow")
     public void createDatabaseDump() {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String dumpFileName = backupDir + "backup_" + timestamp + ".sql";

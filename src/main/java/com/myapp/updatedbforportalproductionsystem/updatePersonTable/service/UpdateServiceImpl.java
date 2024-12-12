@@ -37,7 +37,7 @@ public class UpdateServiceImpl implements UpdateService{
     }
 
     @Override
-    @Scheduled(cron = "0 30 11 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 30 9 * * *", zone = "Europe/Moscow")
     public void updateTablePerson() {
         List<Person> personList = new ArrayList<>();
         String querySelectData = "SELECT tab_n, full_name_io, appoint_name, dept_root_name FROM persons_cand" +
