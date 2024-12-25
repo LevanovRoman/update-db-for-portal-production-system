@@ -1,18 +1,14 @@
 package com.myapp.updatedbforportalproductionsystem.updatePersonTable.service;
 
+import com.myapp.updatedbforportalproductionsystem.config.UpdateTableConfig;
 import com.myapp.updatedbforportalproductionsystem.updatePersonTable.entity.Person;
 import com.myapp.updatedbforportalproductionsystem.updatePersonTable.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,31 +16,25 @@ import java.util.List;
 public class UpdateServiceImpl implements UpdateService{
 
     private final PersonRepository personRepository;
-    private final JdbcTemplate jdbcTemplate;
+    private final UpdateTableConfig updateTableConfig;
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateServiceImpl.class);
 
-    @Value("${POSTGRES_EXTERNAL_URL}")
-    private String POSTGRES_URL;
-    @Value("${POSTGRES_EXTERNAL_USERNAME}")
-    private String POSTGRES_USERNAME;
-    @Value("${POSTGRES_EXTERNAL_PASSWORD}")
-    private String POSTGRES_PASSWORD;
-
-    public UpdateServiceImpl(PersonRepository personRepository, JdbcTemplate jdbcTemplate) {
+    public UpdateServiceImpl(PersonRepository personRepository, UpdateTableConfig updateTableConfig) {
         this.personRepository = personRepository;
-        this.jdbcTemplate = jdbcTemplate;
+        this.updateTableConfig = updateTableConfig;
     }
 
     @Override
     @Scheduled(cron = "0 20 8 * * *", zone = "Europe/Moscow")
     public void updateTablePerson() {
         List<Person> personList = new ArrayList<>();
-        String querySelectData = "SELECT tab_n, INITCAP(\"full_name_io\") AS full_name_io, \"appoint_name\", dept_root_name FROM persons_cand WHERE persons_cand.d_out > CURRENT_DATE";
+        String querySelectData = "SELECT tab_n, INITCAP(\"full_name_io\") AS full_name_io, \"appoint_name\", dept_root_name " +
+                "FROM persons_cand WHERE persons_cand.d_out > CURRENT_DATE";
 
-        logger.info("Start of the table 'person' update  {}", getCurrentTime());
-        // Заполняем таблицу person из persons_cand
-        try (Connection connection = DriverManager.getConnection(POSTGRES_URL, POSTGRES_USERNAME, POSTGRES_PASSWORD);
+        logger.info("Start of the table 'person' update  {}", updateTableConfig.getCurrentTime());
+        // Заполняем таблицу person из 'persons_cand'
+        try (Connection connection = updateTableConfig.getConnectionPostgres();
              Statement statement = connection.createStatement()){
             try (ResultSet resultSet = statement.executeQuery(querySelectData)) {
                 while (resultSet.next()) {
@@ -55,10 +45,9 @@ public class UpdateServiceImpl implements UpdateService{
                     person.setDepartment(resultSet.getString("dept_root_name"));
                     personList.add(person);
             }
-
         }
             // Удаляем таблицу person
-            truncateTable();
+            updateTableConfig.truncateTable("person");
             logger.info("Table 'person' deleted successfully.");
         }catch (Exception e) {
             logger.error("An error occurred", e);
@@ -69,15 +58,5 @@ public class UpdateServiceImpl implements UpdateService{
 
     private void savePerson(List<Person> personList){
         personRepository.saveAll(personList);
-    }
-
-    private void truncateTable() {
-        jdbcTemplate.execute("TRUNCATE TABLE person RESTART IDENTITY CASCADE");
-    }
-
-    private String getCurrentTime() {
-        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        return currentTime.format(formatter);
     }
 }

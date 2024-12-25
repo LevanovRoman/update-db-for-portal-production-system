@@ -1,7 +1,5 @@
 package com.myapp.updatedbforportalproductionsystem;
 
-import java.util.TimeZone;
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +10,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableScheduling
 public class UpdateDbForPortalProductionSystemApplication {
-
-    @PostConstruct
-    public void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow")); // Или TimeZone.getDefault()
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(UpdateDbForPortalProductionSystemApplication.class, args);

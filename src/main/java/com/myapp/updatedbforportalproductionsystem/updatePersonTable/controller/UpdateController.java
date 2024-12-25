@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.SQLException;
 
 @RestController
-@RequestMapping("getdata")
+@RequestMapping("update-person")
 public class UpdateController {
 
     private final UpdateService updateService;
