@@ -25,14 +25,17 @@ public class Suggestion {
 
     private String implemented;
 
+    @Column(nullable = true)
     private String dateImplementation;
+
+    private String category;
 
     public Suggestion() {
     }
 
     public Suggestion(Long id, String title, String numberAndDateRegistration, String department,
                       String author, String registered, String agreed, String implemented,
-                      String dateImplementation) {
+                      String dateImplementation, String category) {
         this.id = id;
         this.title = title;
         this.numberAndDateRegistration = numberAndDateRegistration;
@@ -42,10 +45,15 @@ public class Suggestion {
         this.agreed = agreed;
         this.implemented = implemented;
         this.dateImplementation = dateImplementation;
+        this.category = category;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setTitle(String title) {

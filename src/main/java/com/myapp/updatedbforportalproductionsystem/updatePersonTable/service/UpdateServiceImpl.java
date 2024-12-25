@@ -26,7 +26,7 @@ public class UpdateServiceImpl implements UpdateService{
     }
 
     @Override
-    @Scheduled(cron = "0 20 8 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 15 08 * * *", zone = "Europe/Moscow")
     public void updateTablePerson() {
         List<Person> personList = new ArrayList<>();
         String querySelectData = "SELECT tab_n, INITCAP(\"full_name_io\") AS full_name_io, \"appoint_name\", dept_root_name " +
