@@ -26,15 +26,22 @@ public class Person {
 
     private String department;
 
+    private String departmentTrim;
+
     public Person() {
     }
 
-    public Person(String tabNumber, Long id, String fullName, String appointName, String department) {
-        this.tabNumber = tabNumber;
+    public Person(Long id, String tabNumber, String fullName, String appointName, String department, String departmentTrim) {
         this.id = id;
+        this.tabNumber = tabNumber;
         this.fullName = fullName;
         this.appointName = appointName;
         this.department = department;
+        this.departmentTrim = departmentTrim;
+    }
+
+    public void setDepartmentTrim(String departmentTrim) {
+        this.departmentTrim = departmentTrim;
     }
 
     public void setId(Long id) {

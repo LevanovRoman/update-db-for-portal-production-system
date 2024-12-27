@@ -29,7 +29,7 @@ public class UpdateServiceImpl implements UpdateService{
     @Scheduled(cron = "0 15 08 * * *", zone = "Europe/Moscow")
     public void updateTablePerson() {
         List<Person> personList = new ArrayList<>();
-        String querySelectData = "SELECT tab_n, INITCAP(\"full_name_io\") AS full_name_io, \"appoint_name\", dept_root_name " +
+        String querySelectData = "SELECT tab_n, INITCAP(\"full_name_io\") AS full_name_io, \"appoint_name\", actual_dept_root_name " +
                 "FROM persons_cand WHERE persons_cand.d_out > CURRENT_DATE";
 
         logger.info("Start of the table 'person' update  {}", updateTableConfig.getCurrentTime());
@@ -38,11 +38,14 @@ public class UpdateServiceImpl implements UpdateService{
              Statement statement = connection.createStatement()){
             try (ResultSet resultSet = statement.executeQuery(querySelectData)) {
                 while (resultSet.next()) {
+                    String dept = resultSet.getString("actual_dept_root_name");
+                    String firstThreeChars = dept.length() >= 3 ? dept.substring(0, 3) : dept;
                     Person person = new Person();
                     person.setTabNumber(resultSet.getString("tab_n"));
                     person.setFullName(resultSet.getString("full_name_io"));
                     person.setAppointName(resultSet.getString("appoint_name"));
-                    person.setDepartment(resultSet.getString("dept_root_name"));
+                    person.setDepartment(dept);
+                    person.setDepartmentTrim(firstThreeChars);
                     personList.add(person);
             }
         }

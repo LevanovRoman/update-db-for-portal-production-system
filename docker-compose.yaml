@@ -1,6 +1,8 @@
 services:
   portal-server:
     container_name: update_pps
+    environment:
+      - TZ=${TZ}
     build:
       dockerfile: Dockerfile
       args:
